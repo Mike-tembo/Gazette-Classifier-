@@ -27,3 +27,9 @@ legislation, appointments, tenders, notices and regulations
 2. Automate Categorization: Train and deploy the classifier to a production
 environment where it can handle new, incoming Gazette entries without human
 intervention.
+
+## Initial Project Success Criteria
+
+We will consider the project a success if it meets the following criteria:
+Model Performance: The classification model must achieve a minimum of 80% accuracy.
+Balanced Performance: The model must demonstrate balanced precision and recall across all of the predefined categories.
