@@ -20,10 +20,10 @@ Our project is to build a machine learning system that takes  Gazette entries an
 
 To achieve our business objectives, we will focus on the following data mining goals:
 
-1 Build a Supervised Classification Model: We will develop a model that can
+1. Build a Supervised Classification Model: We will develop a model that can
 automatically assign each Gazette entry to one of several predefined categories such as
 legislation, appointments, tenders, notices and regulations
 
-2 Automate Categorization: Train and deploy the classifier to a production
+2. Automate Categorization: Train and deploy the classifier to a production
 environment where it can handle new, incoming Gazette entries without human
 intervention.
