@@ -38,7 +38,7 @@ Balanced Performance: The model must demonstrate balanced precision and recall a
 
 ##  Extract Columns Gazette number, Act, Act number and Main body
 
-def parse_gazette_text(txt_path):
+    def parse_gazette_text(txt_path):
     """
     Reads the extracted text file and parses it to separate gazette notices.
     """
