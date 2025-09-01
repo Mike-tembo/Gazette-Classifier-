@@ -52,3 +52,9 @@ var_df_gazettes.head(10)
 
 ### Summary of the dataFrame ,displaying the number of columns and rows, and datatype with non-null values
 var_df_gazettes.info()
+
+### Summary of the structure of dataset
+var_df_gazettes.describe()
+
+### Displaying the number of rows and columns in the dataset
+var_df_gazettes.shape
