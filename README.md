@@ -58,3 +58,25 @@ var_df_gazettes.describe()
 
 ### Displaying the number of rows and columns in the dataset
 var_df_gazettes.shape
+
+### visualization of the dataset
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+df = var_df_gazettes
+df_clean = df.dropna(subset=['Act'])
+top_counts = df_clean['Act'].value_counts().head(20)
+
+plt.figure(figsize=(10, 6))
+top_counts.plot(kind='barh', color='green')
+plt.xlabel('Number of Notices')
+plt.ylabel('Act')
+plt.title('Top 20 Notices by Act')
+plt.gca().invert_yaxis()
+plt.tight_layout()
+plt.show()
+
+
+print("\nTop 20 Counts of Notices by Act:")
+print(top_counts)
