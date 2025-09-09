@@ -123,7 +123,7 @@ print(var_selected_df.isnull().sum())
 
 var_selected_df.shape
 
-### **2.2 Handling Duplicate Values**
+#### **2.2 Handling Duplicate Values**
 
 
 Before cleaning, we check for duplicate entries in the **Notice_No** column, which serves as a unique identifier for each record.  
