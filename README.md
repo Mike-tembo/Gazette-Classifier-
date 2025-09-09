@@ -147,4 +147,3 @@ print('Missing values After cleaning')
 print(var_selected_df.isnull().sum())
 
 var_selected_df.shape
-```
