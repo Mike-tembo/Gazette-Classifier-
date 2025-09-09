@@ -110,3 +110,15 @@ We first check for missing values across the selected features.
 # Check missing values before cleaning
 print('Missing values before cleaning')
 print(var_selected_df.isnull().sum())
+
+# Drop rows with missing 'Act'
+var_selected_df.dropna(subset=['Act'], inplace=True)
+
+# Drop rows with missing 'Details'
+var_selected_df = var_selected_df.dropna(subset=['Details'])
+
+# Check missing values after cleaning
+print('Missing values After cleaning')
+print(var_selected_df.isnull().sum())
+
+var_selected_df.shape
