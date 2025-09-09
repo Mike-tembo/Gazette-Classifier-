@@ -91,13 +91,13 @@ Act: provides the legal reference associated with each notice
 We create a new dataframe with these features to reduce noise and focus on the information that matters for the modeling phase.
 Displaying the first 10 rows allows us to quickly verify that the correct columns have been selected.
 
-# select the columns to use
+#select the columns to use
 var_selectedcolumns = ['Notice_No', 'Details', 'Act']
 
-# Create a new dataframe with those columns
+#Create a new dataframe with those columns
 var_selected_df = var_df_gazettes[var_selectedcolumns].copy()
 
-# Display the first 10 rows
+#Display the first 10 rows
 var_selected_df.head(10)
 
 ### **2.Data Pre-processing (Cleaning)**
@@ -107,17 +107,17 @@ We first check for missing values across the selected features.
 - **Act**:Rows with missing values are dropped to preserve data integrity.  
 - **Details**: As the primary input feature, rows missing this information are also dropped, since they would not contribute meaningful input to the model.  
 
-# Check missing values before cleaning
+#Check missing values before cleaning
 print('Missing values before cleaning')
 print(var_selected_df.isnull().sum())
 
-# Drop rows with missing 'Act'
+#Drop rows with missing 'Act'
 var_selected_df.dropna(subset=['Act'], inplace=True)
 
-# Drop rows with missing 'Details'
+#Drop rows with missing 'Details'
 var_selected_df = var_selected_df.dropna(subset=['Details'])
 
-# Check missing values after cleaning
+#Check missing values after cleaning
 print('Missing values After cleaning')
 print(var_selected_df.isnull().sum())
 
