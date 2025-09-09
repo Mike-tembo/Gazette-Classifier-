@@ -280,3 +280,37 @@ var_transformed_df = var_transformed_df.drop(columns=['Act', 'Details'])
 
 # Display the first 5 rows transposed for easier readability
 var_transformed_df.head(5).T
+
+### **Transforming Text**
+#### **Bag-of-Words (BoW)**
+To utilise the  **CleanedDetails** column in our model, we use the Bag of Words with these parameters :
+
+- **Max features = 300**: We limit the number of features to 300 to reduce dimensionality and avoid sparsity, while keeping the most informative terms.  
+- **N-gram range = (1,2)**: We include both unigrams and bigrams to capture important word combinations that convey more meaning than single words alone.  
+- **Minimum document frequency = 2**: We remove very rare words that appear in fewer than 2 documents, as they are unlikely to contribute to general patterns.  
+
+After fitting and transforming the text, we create a dataframe from the BoW matrix and concatenate it with the original dataframe.  
+Finally, we drop the original **CleanedDetails** column because its numeric representation is now included, keeping the dataset ready for modeling.  
+We display the first 20 rows (transposed) to verify the transformation.
+
+# Initialize CountVectorizer with max 300 features, unigrams and bigrams, min 2 docs
+var_bow_vectorizer = CountVectorizer(
+    max_features=300,
+    ngram_range=(1,2),
+    min_df=2,
+)
+
+# Fit and transform 'CleanedDetails' to BoW matrix
+var_matrix = var_bow_vectorizer.fit_transform(var_transformed_df['CleanedDetails'])
+
+# Create dataframe from BoW matrix
+var_bow_df = pd.DataFrame(var_matrix.toarray(), columns=var_bow_vectorizer.get_feature_names_out())
+
+# Concatenate BoW features with original dataframe
+var_final_processed_df = pd.concat([var_transformed_df, var_bow_df], axis=1)
+
+# Drop the original 'CleanedDetails' column
+var_final_processed_df = var_final_processed_df.drop(columns=['CleanedDetails'])
+
+# Display first 20 rows transposed
+var_final_processed_df.head(20).T
