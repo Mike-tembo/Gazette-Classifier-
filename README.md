@@ -174,3 +174,65 @@ print(f"Number of duplicates in Notice_No after cleaning: {var_duplicates}")
 
 # Show the final shape of the cleaned dataframe
 print("Final dataframe shape:", var_processed_df.shape)
+```
+#### **2.3 Text Pre-processing**
+
+To prepare the **`Details`** column for modeling, we apply a text preprocessing pipeline consisting of the following steps:  
+
+1. **Convert to lowercase** – standardizes text and reduces duplication of words with different cases.  
+2. **Remove punctuation** – eliminates punctuation marks that do not contribute to text meaning.  
+3. **Remove extra whitespace** – cleans up irregular spacing caused by punctuation removal or formatting.  
+4. **Remove stopwords** – removes common words (e.g., *the*, *is*) that do not carry meaningful information.  
+5. **Lemmatize text** – reduces words to their base form to unify similar terms (e.g., *running* → *run*).  
+6. **Full pipeline** – applies all the above steps sequentially for consistent and clean textual data.  
+
+The cleaned text is stored in a new column **`CleanedDetails`**, allowing us to retain the original text while preparing it for modeling.  
+We also verify the first few rows and the shape of the processed dataframe to confirm that the pipeline works correctly.  
+
+---
+
+```python
+# Convert to lowercase
+def fxn_convert_to_lowercase(var_text):
+    return var_text.lower()
+
+# Remove punctuation
+def fxn_remove_punctuation(var_text):
+    return "".join([ch if ch not in string.punctuation else " " for ch in var_text])
+
+# Remove extra whitespace
+def fxn_remove_extra_whitespace(var_text):
+    return " ".join(var_text.split())
+
+# Remove stopwords
+def fxn_remove_stopwords(var_text):
+    var_tokens = word_tokenize(var_text)
+    var_stop_words = set(stopwords.words("english"))
+    var_filtered_tokens = [word for word in var_tokens if word.lower() not in var_stop_words]
+    return " ".join(var_filtered_tokens)
+
+# Lemmatize text
+def fxn_lemmatize_text(var_text):
+    var_tokens = word_tokenize(var_text)
+    lemmatizer = WordNetLemmatizer()
+    var_lemmatized_tokens = [lemmatizer.lemmatize(word) for word in var_tokens]
+    return " ".join(var_lemmatized_tokens)
+
+# Full preprocessing pipeline
+def fxn_preprocess_text_pipeline(var_text):
+    if not isinstance(var_text, str):
+        return ""
+    text = fxn_convert_to_lowercase(var_text)
+    text = fxn_remove_punctuation(text)
+    text = fxn_remove_extra_whitespace(text)
+    text = fxn_remove_stopwords(text)
+    text = fxn_lemmatize_text(text)
+    text = fxn_remove_extra_whitespace(text)  # final cleanup
+    return text
+
+# Apply pipeline to dataframe
+var_processed_df["CleanedDetails"] = var_processed_df["Details"].apply(fxn_preprocess_text_pipeline)
+
+print("--- Text Pre-processing Complete ---")
+print(var_processed_df[["Details", "CleanedDetails"]].head())
+var_processed_df.shape
