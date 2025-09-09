@@ -236,3 +236,47 @@ var_processed_df["CleanedDetails"] = var_processed_df["Details"].apply(fxn_prepr
 print("--- Text Pre-processing Complete ---")
 print(var_processed_df[["Details", "CleanedDetails"]].head())
 var_processed_df.shape
+```
+## **Data Transformation**
+
+### **Step 1: One-Hot Encoding of the `Act` Column**
+
+Because the **`Act`** column contains nominal data, we apply one-hot encoding:  
+
+1. Convert all text in **`Act`** to lowercase to ensure consistency.  
+2. Use `OneHotEncoder` to transform each unique category in **`Act`** into a binary column.  
+3. Create a new dataframe with the encoded columns.  
+4. Concatenate the encoded columns with the original dataframe, aligning rows correctly.  
+
+This transformation allows the categorical **`Act`** feature to be used effectively in machine learning models.  
+We then verify the first few rows and the shape of the transformed dataframe to confirm the encoding is complete.  
+
+---
+
+```python
+# Initialize one-hot encoder
+var_encoder = OneHotEncoder()
+
+# Convert 'Act' text to lowercase for consistency
+var_processed_df["Act"] = var_processed_df["Act"].apply(fxn_convert_to_lowercase)
+
+# Apply one-hot encoding to 'Act'
+var_encoded_data = var_encoder.fit_transform(var_processed_df[['Act']])
+
+# Create a dataframe from the encoded data
+var_encoded_df = pd.DataFrame(
+    var_encoded_data.toarray(), 
+    columns=var_encoder.get_feature_names_out(['Act'])
+)
+
+# Align the index to match the original dataframe
+var_encoded_df.index = var_processed_df.index
+
+# Concatenate encoded columns with the original dataframe
+var_transformed_df = pd.concat([var_processed_df, var_encoded_df], axis=1)
+
+# Drop the original 'Act' and 'Details' columns
+var_transformed_df = var_transformed_df.drop(columns=['Act', 'Details'])
+
+# Display the first 5 rows transposed for easier readability
+var_transformed_df.head(5).T
