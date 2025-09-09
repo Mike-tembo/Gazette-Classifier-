@@ -99,3 +99,14 @@ var_selected_df = var_df_gazettes[var_selectedcolumns].copy()
 
 # Display the first 10 rows
 var_selected_df.head(10)
+
+### **2.Data Pre-processing (Cleaning)**
+#### **2.1 Handling Missing Values**
+We first check for missing values across the selected features.  
+
+- **Act**:Rows with missing values are dropped to preserve data integrity.  
+- **Details**: As the primary input feature, rows missing this information are also dropped, since they would not contribute meaningful input to the model.  
+
+# Check missing values before cleaning
+print('Missing values before cleaning')
+print(var_selected_df.isnull().sum())
