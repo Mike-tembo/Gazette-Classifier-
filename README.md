@@ -280,6 +280,7 @@ var_transformed_df = var_transformed_df.drop(columns=['Act', 'Details'])
 
 # Display the first 5 rows transposed for easier readability
 var_transformed_df.head(5).T
+```
 
 ### **Transforming Text**
 #### **Bag-of-Words (BoW)**
@@ -293,6 +294,7 @@ After fitting and transforming the text, we create a dataframe from the BoW matr
 Finally, we drop the original **CleanedDetails** column because its numeric representation is now included, keeping the dataset ready for modeling.  
 We display the first 20 rows (transposed) to verify the transformation.
 
+``` python
 # Initialize CountVectorizer with max 300 features, unigrams and bigrams, min 2 docs
 var_bow_vectorizer = CountVectorizer(
     max_features=300,
@@ -314,3 +316,4 @@ var_final_processed_df = var_final_processed_df.drop(columns=['CleanedDetails'])
 
 # Display first 20 rows transposed
 var_final_processed_df.head(20).T
+```
