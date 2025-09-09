@@ -80,3 +80,22 @@ plt.show()
 
 print("\nTop 20 Counts of Notices by Act:")
 print(top_counts)
+
+# **Data Preprocessing**
+### **1. Data Selection**
+In this step, we extract only the columns that are most relevant for our analysis:
+
+Notice_No: serves as a unique identifier for each record
+Details: contains the main textual information that will be used as the input feature for modeling
+Act: provides the legal reference associated with each notice
+We create a new dataframe with these features to reduce noise and focus on the information that matters for the modeling phase.
+Displaying the first 10 rows allows us to quickly verify that the correct columns have been selected.
+
+# select the columns to use
+var_selectedcolumns = ['Notice_No', 'Details', 'Act']
+
+# Create a new dataframe with those columns
+var_selected_df = var_df_gazettes[var_selectedcolumns].copy()
+
+# Display the first 10 rows
+var_selected_df.head(10)
