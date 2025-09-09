@@ -147,3 +147,30 @@ print('Missing values After cleaning')
 print(var_selected_df.isnull().sum())
 
 var_selected_df.shape
+```
+#### **2.2 Handling Duplicate Values**
+
+Before cleaning, we check for duplicate entries in the **`Notice_No`** column, which serves as a unique identifier for each record.  
+
+- Duplicate rows are dropped, keeping only the first occurrence.  
+- This ensures that each notice is represented once, preventing data redundancy and bias in the modeling phase.  
+
+After dropping duplicates, we recheck to confirm that no duplicates remain and verify the final shape of the cleaned dataset.
+
+---
+
+```python
+# Count duplicates in 'Notice_No' before cleaning
+var_duplicates = var_selected_df.duplicated(subset=['Notice_No']).sum()
+print(f"Number of duplicates in Notice_No before cleaning: {var_duplicates}")
+
+# Drop duplicates and keep the first occurrence
+var_processed_df = var_selected_df.drop_duplicates(subset=['Notice_No'], keep="first")
+print(f"Shape after handling duplicates in Notice_No: {var_processed_df.shape}")
+
+# Re-check duplicates in the processed dataframe
+var_duplicates = var_processed_df.duplicated(subset=['Notice_No']).sum()
+print(f"Number of duplicates in Notice_No after cleaning: {var_duplicates}")
+
+# Show the final shape of the cleaned dataframe
+print("Final dataframe shape:", var_processed_df.shape)
