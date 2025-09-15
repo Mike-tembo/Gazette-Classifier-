@@ -448,11 +448,12 @@ Here we assess the performance of the machine learning model using cross-validat
 
 The process involves these key steps:
 
-    Defining Variables: The code first defines the target variable (var_target) to be predicted and the features (var_features) used for prediction. It explicitly drops columns not needed for the model, such as the target and a unique identifier (Notice_No).
+   Defining Variables: The code first defines the target variable (var_target) to be predicted and the features (var_features) used for prediction. It explicitly drops columns not needed for the model, such as the target and a unique identifier (Notice_No).
 
-    Running Cross-Validation: It then uses cross_val_score to split the dataset into five folds (cv=5). The model is trained on four folds and tested on the remaining fold, repeating this process five times. This ensures the model is evaluated on different subsets of the data, providing a more reliable performance estimate than a single train-test split.
+   Running Cross-Validation: It then uses cross_val_score to split the dataset into five folds (cv=5). The model is trained on four folds and tested on the remaining fold, repeating this process five times. This ensures the model is evaluated on different subsets of the data, providing a more reliable performance estimate than a single train-test split.
 
-    Displaying Results: Finally, the code prints the accuracy score for each of the five folds and calculates the mean cross-validation accuracy. This average provides a single, more stable measure of the model's expected performance on unseen data.
+  Displaying Results: Finally, the code prints the accuracy score for each of the five folds and calculates the mean cross-validation accuracy. This average provides a single, more stable measure of the model's expected performance on unseen data.
+```
 
     ``` python
 
@@ -485,4 +486,18 @@ disp.plot(ax=ax, cmap=plt.cm.Blues, xticks_rotation=90)
 plt.title("Confusion Matrix (Cross-Validated Predictions)")
 plt.show()
 
+```
 
+###**Model 2 Predictions**
+
+Evaluating a Naive Bayes Classifier for text classification using several performance metrics.
+
+Firstly we predict the labels (y_pred) for the test data (X_test_tfidf) using a trained Naive Bayes model (nb). It then prints a comprehensive summary of the model's performance, including:
+
+  Accuracy Score: A simple metric showing the proportion of correctly classified instances.
+
+  Classification Report: Provides a detailed breakdown of precision, recall, and F1-score for each class.
+
+  Confusion Matrix: A visual representation  that helps understand where the model is making errors, by showing the counts of true positive, true negative, false positive, and false negative predictions. The matrix is plotted as a heatmap for easy interpretation.
+
+''' python
