@@ -510,3 +510,86 @@ Firstly we predict the labels (y_pred) for the test data (X_test_tfidf) using a 
 * **Confusion Matrix**: is computed from the cross-validated predictions and the true labels (`var_target`). The matrix is displayed as a heatmap.
 
 * **Overall Accuracy**: Finally, calculated based on the cross-validated predictions, providing a single, reliable measure of the model's performance across the entire dataset.
+
+
+
+## **Deployment**
+
+``` python
+
+
+
+
+# drop null values
+df = var_processed_df.dropna(subset=["CleanedDetails", "Notice_Type"])
+X = df["CleanedDetails"]
+y = df["Notice_Type"]
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+
+# Define Pipeline
+pipeline = Pipeline([
+    ("tfidf", TfidfVectorizer(stop_words="english", ngram_range=(1, 2))),
+    ("nb", MultinomialNB())
+])
+
+
+# Train Pipeline
+pipeline.fit(X_train, y_train)
+
+# Save the trained pipeline
+joblib.dump(pipeline, "notice_classifier.pkl")
+
+
+
+
+
+
+pipeline = joblib.load("notice_classifier.pkl")
+#Create simple interface for deployment
+def classify_notice(text):
+    return pipeline.predict([text])[0]
+
+# Create a Gradio interface
+demo = gr.Interface(
+    fn=classify_notice,
+    inputs="text",
+    outputs="text",
+    title="Notice Classifier",
+    description="Enter a notice text and get its category"
+)
+
+# Launch app
+demo.launch()
+
+
+
+#  Deployment Summay
+
+## Final Model Selection  
+Based on the evaluation results, we selected **MODEL 2** that achieved the highest accuracy and provided predictions on the test set. This model demonstrated consistent performance across multiple evaluation metrics, including accuracy, precision, recall, and the confusion matrix.
+
+### Key Insights
+
+From this project, we discovered several important insights:
+
+- **Data Preprocessing was Critical**: Careful preprocessing steps, including text cleaning, tokenization, and TF-IDF vectorization, significantly improved model performance. Without these steps, the raw text data was noisy and inconsistent, which would have reduced predictive power.
+
+- **Dataset Size and Class Imbalance**: One of the major limitations was the relatively small dataset. Some categories had only a single gazette, while others had more balanced representation. This imbalance made it difficult for the model to generalize, as it tended to overfit on classes with very few examples.
+
+- **Algorithm Effectiveness**: Among the tested models, the final pipeline was the most effective in capturing patterns in the gazette text. However, performance was skewed toward well-represented categories, while underperforming on rare classes.
+
+- **Overfitting Concerns**: Because of the limited data in some categories, the model exhibited signs of overfitting. It achieved high accuracy on the training and majority-class data but struggled to correctly classify instances from minority classes.
+
+- **Evaluation Results**: The evaluation highlighted strong predictive performance overall, with accuracy above 99%. Still, precision and recall for minority classes were very low or undefined, confirming that the model struggled where data was sparse.
+
+
+## Deployment Plan  
+In a real-world scenario, deployment of this model would involve embedding it into a larger application pipeline. Possible deployment approaches include:  
+- **Interactive Dashboard**: End-users could upload new data and visualize predictions in real time via a dashboard built with Streamlit, Flask, or Dash.  
+- **Automated Reports**: The model’s predictions could be integrated into a reporting system that periodically generates insights (e.g., weekly summaries).  
+- **API Endpoint**: A REST API could be created (using Flask or FastAPI) to allow other applications to send input data and receive predictions.  
+
+For demonstration purposes within this project, we simulate deployment by defining a simple Python function that takes new data as input and returns a prediction.  
