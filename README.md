@@ -441,3 +441,48 @@ var_Bayes.fit(X_train_combined, y_train)
 ```
 
 
+###**Model 1 Predictions**
+Model Performance Evaluation Using Cross-Validation
+
+Here we assess the performance of the machine learning model using cross-validation, a robust technique for estimating a model's generalization ability.
+
+The process involves these key steps:
+
+    Defining Variables: The code first defines the target variable (var_target) to be predicted and the features (var_features) used for prediction. It explicitly drops columns not needed for the model, such as the target and a unique identifier (Notice_No).
+
+    Running Cross-Validation: It then uses cross_val_score to split the dataset into five folds (cv=5). The model is trained on four folds and tested on the remaining fold, repeating this process five times. This ensures the model is evaluated on different subsets of the data, providing a more reliable performance estimate than a single train-test split.
+
+    Displaying Results: Finally, the code prints the accuracy score for each of the five folds and calculates the mean cross-validation accuracy. This average provides a single, more stable measure of the model's expected performance on unseen data.
+
+    ``` python
+
+
+
+from sklearn.model_selection import cross_val_score
+
+# Define the target variable
+var_target = var_final_processed_df['Notice_Type']
+
+# 'Notice_No' from the features
+var_features = var_final_processed_df.drop(columns=['Notice_Type', 'Notice_No'])
+
+
+var_score = cross_val_score(forest_model, var_features, var_target, scoring='accuracy', cv=5)
+print(f"Cross-validation accuracy scores: {var_score}")
+print(f"Mean cross-validation accuracy: {var_score.mean():.2f}")
+
+print("Confusion Matrix of the First model")
+# Assuming 'model', 'var_features', and 'var_target' are already defined
+y_pred = cross_val_predict(forest_model, var_features, var_target, cv=5)
+
+# Compute confusion matrix
+cm = confusion_matrix(var_target, y_pred, labels=var_target.unique())
+
+# Display confusion matrix
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=var_target.unique())
+fig, ax = plt.subplots(figsize=(6, 6))
+disp.plot(ax=ax, cmap=plt.cm.Blues, xticks_rotation=90)
+plt.title("Confusion Matrix (Cross-Validated Predictions)")
+plt.show()
+
+
