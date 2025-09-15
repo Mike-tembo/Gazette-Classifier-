@@ -488,7 +488,7 @@ plt.show()
 
 ```
 
-###**Model 2 Predictions**
+###  **Model 2 Predictions**
 
 Evaluating a Naive Bayes Classifier for text classification using several performance metrics.
 
@@ -500,4 +500,13 @@ Firstly we predict the labels (y_pred) for the test data (X_test_tfidf) using a 
 
   Confusion Matrix: A visual representation  that helps understand where the model is making errors, by showing the counts of true positive, true negative, false positive, and false negative predictions. The matrix is plotted as a heatmap for easy interpretation.
 
-''' python
+
+### **Model 2** - Cross-Validated Model Evaluation
+
+
+* **Initial Evaluation**: The code first makes predictions (`y_pred`) on a test set (`X_test_combined`) using a pre-trained Naive Bayes model (`nb`). It then prints the **accuracy score** and a **classification report**, which provides a detailed breakdown of precision, recall, and F1-score for each class.
+* **Cross-Validation**: It uses `cross_val_predict` to get predictions for every data point in the entire dataset by using a 5-fold cross-validation (`cv=5`).
+
+* **Confusion Matrix**: is computed from the cross-validated predictions and the true labels (`var_target`). The matrix is displayed as a heatmap.
+
+* **Overall Accuracy**: Finally, calculated based on the cross-validated predictions, providing a single, reliable measure of the model's performance across the entire dataset.
