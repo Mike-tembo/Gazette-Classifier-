@@ -359,4 +359,85 @@ for fold, (train_index, test_index) in enumerate(kf.split(var_features, var_targ
     X_train, X_test = var_features.iloc[train_index], var_features.iloc[test_index]
     y_train, y_test = var_target.iloc[train_index], var_target.iloc[test_index]
 
-``` 
+```
+## **model 1 training - random forest**
+Key Benefits Of Random Forest
+
+    High Accuracy: By averaging out the biases of individual trees, a Random Forest often produces highly accurate predictions.
+
+    Reduced Overfitting: The random sampling of data and features for each tree ensures that the model doesn't get too specific to the training set.
+
+    Feature Importance: You can easily determine which features were most influential in the model's predictions, providing valuable insights into your data.
+
+    Handles Complex Data: It can model complex, non-linear relationships in your data without requiring extensive feature engineering.
+``` python
+# Initialize and train a RandomForestClassifier model for this fold
+forest_model = RandomForestClassifier(n_estimators=100, random_state=42)
+
+# Drop the 'CleanedDetails' column from the full feature set before the k-fold split
+var_features_numeric = var_features.drop(columns=['CleanedDetails'], errors='ignore')
+
+# Initialize KFold
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+
+# Iterate over the folds and train the model
+for fold, (train_index, test_index) in enumerate(kf.split(var_features_numeric, var_target)):
+
+    # Split data into training and testing sets for this fold using the numeric features
+    X_train, X_test = var_features_numeric.iloc[train_index], var_features_numeric.iloc[test_index]
+    y_train, y_test = var_target.iloc[train_index], var_target.iloc[test_index]
+
+
+    forest_model.fit(X_train, y_train)
+
+    print(f"Fold {fold+1}:")
+    print(f"  Train data shape: {X_train.shape}")
+    print(f"  Test data shape: {X_test.shape}")
+    print("-" * 20)
+
+print("Model training complete for all folds.")
+```
+## **model 2 training**
+### Data Preparation and Feature Engineering for Classification
+
+``` python
+
+
+
+# Prepare dataset
+var_processed_df = var_processed_df.dropna(subset=["CleanedDetails", "Notice_Type", "Act"])
+
+X_text = var_processed_df["CleanedDetails"]
+X_act = var_processed_df[["Act"]]
+y = var_processed_df["Notice_Type"]
+
+
+# Train/Test Split
+X_text_train, X_text_test, X_act_train, X_act_test, y_train, y_test = train_test_split(
+    X_text, X_act, y, test_size=0.3, random_state=42
+)
+
+
+# initialize the tfidfvectorizer
+vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1,2))
+X_text_train_tfidf = vectorizer.fit_transform(X_text_train)
+X_text_test_tfidf = vectorizer.transform(X_text_test)
+
+# Act Features (One-Hot)
+var_Hotencoder = OneHotEncoder(handle_unknown="ignore")
+var_X_act_train = var_Hotencoder.fit_transform(X_act_train)
+var_X_act_test = var_Hotencoder.transform(X_act_test)
+
+# Combine Features
+X_train_combined = hstack([X_text_train_tfidf, var_X_act_train])
+X_test_combined = hstack([X_text_test_tfidf, var_X_act_test])
+
+
+# Train Naive Bayes
+var_Bayes = MultinomialNB()
+var_Bayes.fit(X_train_combined, y_train)
+
+
+```
+
+
