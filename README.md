@@ -317,3 +317,46 @@ var_final_processed_df = var_final_processed_df.drop(columns=['CleanedDetails'])
 # Display first 20 rows transposed
 var_final_processed_df.head(20).T
 ```
+## **MODELING**
+## **dataset splitting with k fold**
+More Reliable Performance Estimate:
+A single train-test split can be misleading. The model's performance might be high or low purely by chance, depending on which data points ended up in the training and testing sets. K-fold cross-validation mitigates this by running the evaluation process multiple times.
+Efficient Use of Data:
+
+---
+
+
+It allows you to use your entire dataset for both training and validation. Every data point gets to be in a test set exactly once and in a training set k-1 times. This is especially beneficial for smaller datasets where a single train-test split might leave you with too little data for either training or testing.
+
+Reduces Overfitting:
+
+---
+
+
+The cross-validation process helps detect if your model is overfitting. If the model performs well on the training folds but poorly on \the validation folds, it's a strong sign of overfitting.
+
+``` python
+
+# Drop rows with missing 'Notice_Type' before defining features and target
+var_final_processed_df = var_final_processed_df.dropna(subset=['Notice_Type'])
+
+var_final_processed_df.head()
+
+# Define the target variable
+var_target = var_final_processed_df['Notice_Type']
+
+# Drop the target variable and 'Notice_No' from the features
+var_features = var_final_processed_df.drop(columns=['Notice_Type', 'Notice_No'])
+
+# Initialize KFold
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+
+# Iterate over the folds and train the model
+for fold, (train_index, test_index) in enumerate(kf.split(var_features, var_target)):
+
+
+    # Split data into training and testing sets for this fold
+    X_train, X_test = var_features.iloc[train_index], var_features.iloc[test_index]
+    y_train, y_test = var_target.iloc[train_index], var_target.iloc[test_index]
+
+``` 
